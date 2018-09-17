@@ -15,11 +15,11 @@ class CreateDetailRoomsTable extends Migration
     {
         Schema::create('detail_rooms', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('fasilitas_kamar');
+            $table->string('fasilitas_kamar')->default('-');
             $table->smallInteger('luas_kamar');
-            $table->text('kamar_mandi');
-            $table->text('fasilitas_umum');
-            $table->text('fasilitas_parkir');
+            $table->string('kamar_mandi')->default('-');
+            $table->string('fasilitas_umum')->default('-');
+            $table->string('fasilitas_parkir')->default('-');
             $table->text('description');
             $table->unsignedInteger('room_id');
             $table->timestamps();
