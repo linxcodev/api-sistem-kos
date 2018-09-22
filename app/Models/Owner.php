@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Owner extends Model
+class Owner extends Authenticatable
 {
   protected $guarded = [];
+
+  protected $guard = 'owner';
 
   public function rooms()
   {

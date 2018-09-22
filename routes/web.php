@@ -14,3 +14,13 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::prefix('owner')->group(function() {
+  Route::get('/dasboard', 'OwnerController@dasboard')->name('owner.dasboard');
+  Route::get('/login', 'AuthOwner\LoginController@showLoginForm')->name('owner.login');
+  Route::post('/login', 'AuthOwner\LoginController@login')->name('owner.login.submit');
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
