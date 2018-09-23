@@ -155,7 +155,14 @@
       </div>
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
-          <li><a class="logout" href="{{ route('logout') }}">Logout</a></li>
+          <li><a class="logout" href="{{ route('logout') }}"
+            onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();">
+            Logout
+          </a></li>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: one;">
+            {{ csrf_field() }}
+          </form>
         </ul>
       </div>
     </header>
