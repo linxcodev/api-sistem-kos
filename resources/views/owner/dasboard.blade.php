@@ -176,7 +176,7 @@
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
           <p class="centered"><a href=""><img src="{{ asset('img/ui-sam.jpg') }}" class="img-circle" width="80"></a></p>
-          <h5 class="centered">Owner</h5>
+          <h5 class="centered">{{ Auth::user()->username }}</h5>
           <li class="mt">
             <a class="active" href="">
               <i class="fa fa-dashboard"></i>
@@ -214,9 +214,51 @@
     <section id="main-content">
       <section class="wrapper">
        <h3><i class="fa fa-angle-right"></i> Dashboard</h3>
-        <button type="button" class="btn btn-theme pull-right">
-          <i class="fa fa-plus"></i> Add
+        <button type="button" class="btn btn-theme pull-right" data-toggle="modal" data-target="#add">
+          <i class="fa fa-plus"></i> Tambah
         </button>
+        <!-- Modal Add-->
+        <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Kos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form id="formAdd">
+                <div class="modal-body">
+                  <div class="form-group">
+                     @csrf
+                     <label class="control-label">Nama Kos</label>
+                     <input type="text" class="form-control" name="name">
+                     <label class="control-label">Kota</label>
+                     <input type="text" class="form-control" name="city">
+                     <label class="control-label">Harga</label>
+                     <input type="number" class="form-control" name="price">
+                     <label class="control-label">Fasilitas Kamar</label>
+                     <input type="text" class="form-control" name="fasilitas_kamar">
+                     <label class="control-label">Luas Kamar</label>
+                     <input type="number" class="form-control" name="luas_kamar">
+                     <label class="control-label">Kamar Mandi</label>
+                     <input type="text" class="form-control" name="kamar_mandi">
+                     <label class="control-label">Fasilitas Umum</label>
+                     <input type="text" class="form-control" name="fasilitas_umum">
+                     <label class="control-label">Fasilitas Parkir</label>
+                     <input type="text" class="form-control" name="fasilitas_parkir">
+                     <label class="control-label">Description</label>
+                     <textarea name="description" class="form-control" rows="8" cols="80"></textarea>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  <button type="button" id="btnadd" class="btn btn-primary">Simpan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
         <div class="row mt">
           <div class="col-lg-12">
             <div class="content-panel">
@@ -297,26 +339,6 @@
   <!--script for this page-->
   <script src="{{ asset('lib/sparkline-chart.js') }}"></script>
   <script src="{{ asset('lib/zabuto_calendar.js') }}"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      var unique_id = $.gritter.add({
-        // (string | mandatory) the heading of the notification
-        title: 'Welcome to Owner Dasboard!',
-        // (string | mandatory) the text inside the notification
-        text: 'Hover me to enable the Close Button. You can hide the left sidebar clicking on the button next to the logo.',
-        // (string | optional) the image to display on the left
-        image: '{{ asset('img/ui-sam.jpg') }}',
-        // (bool | optional) if you want it to fade out on its own or just sit there
-        sticky: false,
-        // (int | optional) the time you want it to be alive for before fading out
-        time: 8000,
-        // (string | optional) the class name you want to apply to that specific message
-        class_name: 'my-sticky-class'
-      });
-
-      return false;
-    });
-  </script>
   <script type="application/javascript">
     $(document).ready(function() {
       $("#date-popover").popover({
@@ -359,6 +381,36 @@
       console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
     }
   </script>
-</body>
 
+  <script type="text/javascript">
+    $("#btnadd").click(function() {
+      var input = $('#formAdd :input')
+      var values = {id: {{Auth::id()}} }
+
+      input.each(function() {
+        values[this.name] = $(this).val();
+      });
+
+      if (values.name.length == 0 || values.city.length == 0 || values.price.length == 0 || values.luas_kamar.length == 0 || values.description.length == 0) {
+          var unique_id = $.gritter.add({
+            text: 'Data Tidak Boleh Kosong !!!',
+            sticky: true,
+            class_name: 'my-sticky-class'
+          })
+      } else {
+        $.ajax({
+          type: 'POST',
+          url: "{{route('room.store')}}",
+          data: JSON.stringify(values)
+        }).done(function(data) {
+          window.location.reload();
+        })
+      }
+    });
+
+    $('.modal').on('hidden.bs.modal', function () {
+      $.gritter.removeAll();
+    })
+  </script>
+</body>
 </html>

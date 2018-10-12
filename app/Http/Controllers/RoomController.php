@@ -10,17 +10,9 @@ class RoomController extends Controller
 {
   public function store(Request $req)
   {
-    $req->validate([
-      'name' => 'required', 'city' => 'required', 'price' => 'required|integer'
-    ]);
-
-    $req->validate([
-      'luas_kamar' => 'required|integer', 'description' => 'required'
-    ]);
-
     $room = Room::create([
       'name' => $req->json('name'), 'city' => $req->json('city'),
-      'price' => $req->json('price'), 'owner_id' => $req->json('owner_id')
+      'price' => $req->json('price'), 'owner_id' => $req->json('id')
     ]);
 
     $detail = Detail::create([

@@ -2,7 +2,7 @@
 
 Route::middleware(['api'])->group(function () {
   // room
-  Route::post('rooms', 'RoomController@store');
+  Route::post('rooms', 'RoomController@store')->name('room.store');
   Route::put('rooms/{id}', 'RoomController@update');
   Route::delete('rooms/{id}', 'RoomController@destroy');
 

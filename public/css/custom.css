@@ -22,8 +22,6 @@ td {
 }
 
 .site-footer {
-  position:absolute;
-  z-index: -1;
   bottom:0;
   width:100%;
 }
@@ -44,4 +42,40 @@ tr td .fa-info {
   .content-panel {
     margin-top: 45px;
   }
+}
+
+.modal-header > h5 {
+  float: left;
+  font-size: 19px;
+}
+
+form-control {
+  height: 39px;
+  border-radius: 5px;
+}
+
+label {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+label ~ label {
+  margin-top: 14px;
+}
+
+/* warining alert */
+.gritter-item {
+  background: lemonchiffon;
+  color: sienna;
+  padding: 15px;
+  border-radius: 8px
+}
+
+.gritter-top, .gritter-bottom {
+  height: 0
+}
+
+.gritter-without-image p {
+  font-size: 17px;
+  font-weight: bold;
 }

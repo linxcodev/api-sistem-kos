@@ -29,6 +29,11 @@ class LoginController extends Controller
       return view('authOwner.login');
     }
 
+    // protected function authenticated(Request $request, $user)
+    // {
+    //   dd($user);
+    // }
+
     use AuthenticatesUsers;
 
     protected $redirectTo = '/owner/dashboard';
