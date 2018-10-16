@@ -21,6 +21,8 @@ Route::prefix('owner')->group(function() {
   Route::post('/login', 'AuthOwner\LoginController@login')->name('owner.login.submit');
 });
 
+Route::get('room/edit', 'RoomController@edit')->name('room.edit');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

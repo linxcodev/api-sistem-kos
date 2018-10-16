@@ -31,24 +31,40 @@ class RoomController extends Controller
     return response()->json(['room' => $room, 'detail' => $detail]);
   }
 
-  public function update(Request $req, $id)
+  public function edit()
   {
-    $req->validate([
-      'name' => 'required',
-      'city' => 'required',
-      'price' => 'required|integer'
-    ]);
-
+    // return "masuk pak eko";
+    $id = request()->id;
     $room = Room::find($id);
 
+    $detail = Detail::where('room_id', $id)->get();
+    //
+    $room = json_decode($room);
+    $detail = json_decode($detail);
+    // return $room.$detail;
+    return response()->json([$room, $detail]);
+  }
+
+  public function update(Request $req, $id)
+  {
+    $room = Room::find($id);
+    $detail = Detail::where('room_id', $id);
+
     $room->update([
-      'name' => $req->json('name'),
-      'city' => $req->json('city'),
-      'price' => $req->json('price'),
-      'owner_id' => $req->json('owner_id')
+      'name' => $req->json('name'), 'city' => $req->json('city'),
+      'price' => $req->json('price')
     ]);
 
-    return $room;
+    $detail->update([
+      'fasilitas_kamar' => $req->json('fasilitas_kamar'),
+      'luas_kamar' => $req->json('luas_kamar'),
+      'kamar_mandi' => $req->json('kamar_mandi'),
+      'fasilitas_umum' => $req->json('fasilitas_umum'),
+      'fasilitas_parkir' => $req->json('fasilitas_parkir'),
+      'description' => $req->json('description'),
+    ]);
+
+    return 'success';
   }
 
   public function destroy($id)

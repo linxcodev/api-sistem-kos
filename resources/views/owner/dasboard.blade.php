@@ -214,7 +214,7 @@
     <section id="main-content">
       <section class="wrapper">
        <h3><i class="fa fa-angle-right"></i> Dashboard</h3>
-        <button type="button" class="btn btn-theme pull-right" data-toggle="modal" data-target="#add">
+        <button type="button" id="tmbh" class="btn btn-theme pull-right" data-toggle="modal" data-target="#add">
           <i class="fa fa-plus"></i> Tambah
         </button>
         <!-- Modal Add-->
@@ -248,13 +248,10 @@
                      <label class="control-label">Fasilitas Parkir</label>
                      <input type="text" class="form-control" name="fasilitas_parkir">
                      <label class="control-label">Description</label>
-                     <textarea name="description" class="form-control" rows="8" cols="80"></textarea>
+                     <textarea name="description" id="desc" class="form-control" rows="8" cols="80"></textarea>
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                  <button type="button" id="btnadd" class="btn btn-primary">Simpan</button>
-                </div>
+                <div class="modal-footer" id="mf"></div>
               </form>
             </div>
           </div>
@@ -285,7 +282,8 @@
                             <button class="btn btn-success btn-xs" title="Detail">
                               <i class="fa fa-info"></i>
                             </button>
-                            <button class="btn btn-primary btn-xs" title="Edit">
+                            <button class="btn btn-primary btn-xs upd" data-id="{{$owner->id}}"
+                               title="Edit" data-toggle="modal" data-target="#add">
                               <i class="fa fa-pencil"></i>
                             </button>
                             <button class="btn btn-danger btn-xs" title="Hapus">
@@ -383,7 +381,34 @@
   </script>
 
   <script type="text/javascript">
-    $("#btnadd").click(function() {
+    $('#tmbh').click(function() {
+      $('#formAdd :input').val('')
+      $('#mf').empty()
+      $('#mf').append('<button type="button" class="btn" data-dismiss="modal">Close</button>')
+      $('#mf').append('<button type="button" id="btnadd" class="btn btn-primary">Simpan</button>')
+    })
+    $('.upd').click(function() {
+      var id  = $(this).attr('data-id')
+      $('#idhd').remove()
+      $('.form-group').append('<input type="hidden" id="idhd" value="'+id+'">')
+
+      $.ajax({
+        type: 'GET',
+        url: "{{route('room.edit')}}",
+        data: {id:id}
+      }).done(function(data) {
+        var data = $.extend(data[0], data[1][0]);
+
+        Object.keys(data).forEach(function(key) {
+          $("[name='"+key+"']").val(data[key]);
+        })
+      })
+
+      $('#mf').empty()
+      $('#mf').append('<button type="button" class="btn" data-dismiss="modal">Close</button>')
+      $('#mf').append('<button type="button" id="btnupd" class="btn btn-primary">Update</button>')
+    })
+    $(document).on('click', '#btnadd', function() {
       var input = $('#formAdd :input')
       var values = {id: {{Auth::id()}} }
 
@@ -403,6 +428,31 @@
           url: "{{route('room.store')}}",
           data: JSON.stringify(values)
         }).done(function(data) {
+          window.location.reload();
+        })
+      }
+    });
+    $(document).on('click', '#btnupd', function() {
+      var input = $('#formAdd :input')
+      var id = $('#idhd').val()
+      var values = {}
+
+      input.each(function() {
+        values[this.name] = $(this).val();
+      });
+
+      if (values.name.length == 0 || values.city.length == 0 || values.price.length == 0 || values.luas_kamar.length == 0 || values.description.length == 0) {
+          var unique_id = $.gritter.add({
+            text: 'Data Tidak Boleh Kosong !!!',
+            sticky: true,
+            class_name: 'my-sticky-class'
+          })
+      } else {
+        $.ajax({
+          type: 'PUT',
+          url: "http://mamikos.test/api/rooms/"+id,
+          data: JSON.stringify(values)
+        }).done(function() {
           window.location.reload();
         })
       }

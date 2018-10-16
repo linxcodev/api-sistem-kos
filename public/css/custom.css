@@ -42,6 +42,13 @@ tr td .fa-info {
   .content-panel {
     margin-top: 45px;
   }
+  #gritter-notice-wrapper.bottom-right {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 301px;
+    z-index: 9999;
+  }
 }
 
 .modal-header > h5 {

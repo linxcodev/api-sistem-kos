@@ -3,7 +3,7 @@
 Route::middleware(['api'])->group(function () {
   // room
   Route::post('rooms', 'RoomController@store')->name('room.store');
-  Route::put('rooms/{id}', 'RoomController@update');
+  Route::put('rooms/{id}', 'RoomController@update')->name('room.update');
   Route::delete('rooms/{id}', 'RoomController@destroy');
 
   // usr
